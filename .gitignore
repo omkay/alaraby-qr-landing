@@ -1,2 +1,8 @@
 .DS_Store
+
+# Scratch output from tools/build-preview.py and one-off probes.
 build/
+
+# Python
+__pycache__/
+*.py[cod]
