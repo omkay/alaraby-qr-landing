@@ -19,8 +19,8 @@ from PIL import Image
 import numpy as np
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PAGE = os.path.join(ROOT, "public", "qr-page", "index.html")
-ASSETS = os.path.join(ROOT, "public", "qr-page", "assets")
+PAGE = os.path.join(ROOT, "public", "qr-landing", "index.html")
+ASSETS = os.path.join(ROOT, "public", "qr-landing", "assets")
 
 # A source at least this wide relative to its height is the wordmark lockup.
 # The wordmark trims to roughly 1.53:1; the round wreath is 1:1.

@@ -12,7 +12,7 @@ import re
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PAGE = os.path.join(ROOT, "public", "qr-page", "index.html")
+PAGE = os.path.join(ROOT, "public", "qr-landing", "index.html")
 DEFAULT_OUT = os.path.join(ROOT, "build", "preview.html")
 
 FRAME = """

@@ -1,11 +1,11 @@
 # العربي فروت هاوس — QR landing page
 
-A single static page, served at `https://www.alarabyicecream.com/qr-page`.
+A single static page, served at `https://www.alarabyicecream.com/qr-landing`.
 No build step, no dependencies, no JavaScript framework. One HTML file.
 
 ```
 public/
-  qr-page/
+  qr-landing/
     index.html        ← the whole page (CSS inline, logo inlined as a data URI)
     assets/
       logo.png        ← used for the Open Graph share image
@@ -29,7 +29,7 @@ The WhatsApp link carries a pre-filled Arabic message ("مرحباً، أريد 
 
 ### Known: the Website row currently round-trips
 
-`render.yaml` redirects `/` → `/qr-page`, because right now this Render service
+`render.yaml` redirects `/` → `/qr-landing`, because right now this Render service
 is the only thing on the domain and a bare-domain visit should land somewhere
 useful. That means tapping **الموقع الإلكتروني** goes to the domain root, which
 redirects straight back to this page.
@@ -52,17 +52,17 @@ does nothing in the meantime, delete the Website `<a class="row">` from
 4. At your DNS registrar, add the records Render shows you — a `CNAME` for `www`
    pointing at the `onrender.com` hostname, and Render's `A` record for the apex.
 5. Wait for the certificate to issue (usually a few minutes). The page is then
-   live at `/qr-page`, and the bare domain redirects there.
+   live at `/qr-landing`, and the bare domain redirects there.
 
 Every later `git push` redeploys automatically.
 
 ### If `alarabyicecream.com` already serves a website elsewhere
 
 Render's custom domain claims the **whole** domain, not one path — so you cannot
-put only `/qr-page` on Render while the rest of the site lives on another host.
+put only `/qr-landing` on Render while the rest of the site lives on another host.
 Two options:
 
-- **Copy the page onto the existing host** as `/qr-page/index.html`. The page is
+- **Copy the page onto the existing host** as `/qr-landing/index.html`. The page is
   fully self-contained, so this is a straight file copy.
 - **Use a subdomain** — deploy here and point `qr.alarabyicecream.com` at it. The
   QR code encodes whatever URL you print, so a subdomain costs nothing in
@@ -81,7 +81,7 @@ commented block for address and opening hours.
 python3 -m http.server 8000 --directory public
 ```
 
-Then open <http://localhost:8000/qr-page>.
+Then open <http://localhost:8000/qr-landing>.
 
 ## Tools
 

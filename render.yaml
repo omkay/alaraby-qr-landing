@@ -10,12 +10,12 @@ services:
       # Bare domain sends people to the QR landing page.
       - type: redirect
         source: /
-        destination: /qr-page
+        destination: /qr-landing
     headers:
-      - path: /qr-page/*
+      - path: /qr-landing/*
         name: Cache-Control
         # Short cache so edits to links go live quickly.
         value: public, max-age=300, must-revalidate
-      - path: /qr-page/assets/*
+      - path: /qr-landing/assets/*
         name: Cache-Control
         value: public, max-age=604800
