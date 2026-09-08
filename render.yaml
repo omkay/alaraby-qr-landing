@@ -1,0 +1,21 @@
+services:
+  - type: web
+    runtime: static
+    name: alaraby-qr-page
+    # Nothing to build — the site is plain HTML.
+    buildCommand: "echo 'static site: nothing to build'"
+    staticPublishPath: ./public
+    pullRequestPreviewsEnabled: false
+    routes:
+      # Bare domain sends people to the QR landing page.
+      - type: redirect
+        source: /
+        destination: /qr-page
+    headers:
+      - path: /qr-page/*
+        name: Cache-Control
+        # Short cache so edits to links go live quickly.
+        value: public, max-age=300, must-revalidate
+      - path: /qr-page/assets/*
+        name: Cache-Control
+        value: public, max-age=604800
