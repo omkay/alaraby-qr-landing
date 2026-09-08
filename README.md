@@ -105,6 +105,90 @@ treated as the round wreath logo and fills the badge edge-to-edge; wider than
 1.25:1 is treated as the wordmark lockup and keeps its inner padding. The
 matching CSS classes are `.badge` and `.badge--wordmark`.
 
+### `tools/make-pattern.py` — rebuild the product watermark
+
+```bash
+python3 tools/make-pattern.py [--tile 512] [--icons 12] [--seed 7]
+```
+
+Lifts the product shapes out of the wreath logo by connected-component
+labelling, flattens each to a silhouette, scatters them into a seamlessly
+tiling PNG, and inlines it into `index.html` as `--pattern-url`.
+
+Currently in the pattern: banana, strawberry, orange wedges, chocolate bar,
+ice cream cone, and three leaves. Two shapes were checked and rejected — the
+logo's **apple** keeps its highlight as a hole and its leaf as a separate
+component, so the silhouette is a shapeless blob, and the **fruit basket** has
+too much interior detail to read at watermark size.
+
+**Why a mask, not a coloured image.** The page paints the tile with
+`mask-image`, so the colour comes from the `--pattern-ink` token. One asset
+themes correctly in light and dark, and the opacity stays tunable in CSS.
+Multicolour art at watermark opacity just reads muddy.
+
+Both `-webkit-mask-image` and `mask-image` reference a single
+`--pattern-url` custom property, so the large data URI appears once in the
+stylesheet rather than twice.
+
+**Size.** Anti-aliased alpha is what makes this file big: 256 levels costs
+~39 KB, 5 levels ~13 KB. `--levels` defaults to 5, which is imperceptible at
+~7% opacity on a downscaled tile.
+
+Tuning knobs live in the CSS, not the script:
+
+| Token | Light | Dark |
+| --- | --- | --- |
+| `--pattern-ink` | `rgba(21,84,45,.072)` | `rgba(244,232,210,.065)` |
+| `--pattern-size` | `268px` | same |
+
+Pass a different `--seed` for a different scatter, or `--icons` for density.
+
+### `tools/make-qr.py` — generate the QR code
+
+```bash
+python3 tools/make-qr.py
+```
+
+Needs `segno` and `opencv-python-headless` as well. Writes into `qr/`:
+
+| File | Use |
+| --- | --- |
+| `qr-alaraby.png` | 3015 × 3015 raster — social, digital, most print shops |
+| `qr-alaraby.svg` | Vector modules — signage, large-format, anything scaled up |
+
+**Colours.** Data modules are the logo green `#0A6B37`; the three finder squares
+are `#D85F0E`. That orange is the logo orange one step darker on purpose — the
+brand `#F2731C` is only about 3:1 against white, which is marginal for scanners,
+while `#D85F0E` is roughly 4.5:1 and still reads as the same orange. Green
+carries the data modules because it is the darkest brand colour and those
+modules are small.
+
+**Centre emblem.** The ice cream cone is lifted from the wreath logo itself
+(`tools/assets/cone.png`, extracted from `../media/newLogo.jpeg` by
+connected-component labelling — the wreath's orange arc and green leaves overlap
+the cone, so a plain crop or a hue mask does not separate them). The white circle
+covers about 4.5% of the symbol area, and error correction is fixed at level H
+(~30% recoverable) to absorb it.
+
+**It is verified, not assumed.** The script decodes its own output at a ladder of
+sizes from 2000px down to 120px and fails loudly if any of them break. Current
+result: decodes at every step down to 120px square.
+
+> Note: the script deliberately does not test the native 3015px render. OpenCV's
+> detector fails on very large images even for a plain black-and-white QR with no
+> emblem — verified against a control — so a failure there says nothing about the
+> symbol. Real scanners downscale before decoding.
+
+**Printing.** Minimum practical size is about **30 × 30 mm**. Always keep the
+white quiet zone around the edge — cropping it is the most common reason a
+printed QR stops scanning. Use the SVG for anything larger than a business card.
+
+To point the code somewhere else:
+
+```bash
+python3 tools/make-qr.py --url https://www.alarabyicecream.com/qr-landing
+```
+
 ### `tools/build-preview.py` — regenerate the shareable preview
 
 ```bash

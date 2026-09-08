@@ -25,7 +25,8 @@ FRAME = """
     min-height:100dvh;display:flex;justify-content:center;
     padding:clamp(20px,5vw,48px) 18px 32px;position:relative;overflow-x:hidden;
   }
-  .rtl-root .glow{position:absolute}
+  .rtl-root .glow,
+  .rtl-root .texture{position:absolute}
 </style>
 """
 
@@ -49,7 +50,9 @@ def main():
         sys.exit("error: could not find <body> in index.html")
     body = body.group(1)
 
-    open_at = '<div class="glow glow--a"'
+    # Anchor on the first decorative layer in the body, so everything including
+    # the texture ends up inside the .rtl-root wrapper.
+    open_at = '<div class="texture"'
     close_at = "</div>\n\n<script>"
     for needle in (open_at, close_at):
         if body.count(needle) != 1:
